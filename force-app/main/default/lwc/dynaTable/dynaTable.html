@@ -1,0 +1,39 @@
+<template>
+
+<lightning-card title="Design Attributes" icon-name="custom:custom19">
+    <center>
+        <div if:true={showDetails}>
+            <ul>
+                <li>Entered sObject : <b>{sObject}</b></li>
+                <li>Entered Fields : <b>{Fields}</b></li>
+            </ul>
+        </div>
+    </center>
+</lightning-card>
+
+
+This is from the sObjList
+
+        <lightning-card title="custom datatable">
+
+            <lightning-datatable
+                data={act_data}
+                columns={columns}
+                key-field="Id"
+                hide-checkbox-column="false"
+                show-row-number-column="true"
+                onsort={handleSortdata}
+                sorted-by={sortBy}
+                sorted-direction={sortDirection}
+                row-number-offset="0"
+                >
+            </lightning-datatable>
+        </lightning-card> 
+
+        
+
+    </template>
+    
+
+    
+</template>
