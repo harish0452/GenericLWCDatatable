@@ -14,20 +14,45 @@
 
 This is from the sObjList
 
-        <lightning-card title="custom datatable">
+<lightning-combobox
+        class="combobox"
+        name="progress"
+        label="Status"
+        value={value}
+        placeholder="Select Progress"
+        options={options}
+        onchange={handleChange} >
+</lightning-combobox>
 
+<p>Selected value is: {value}</p>
+
+        <lightning-card title="custom datatable">
             <lightning-datatable
                 data={act_data}
                 columns={columns}
                 key-field="Id"
-                hide-checkbox-column="false"
-                show-row-number-column="true"
                 onsort={handleSortdata}
                 sorted-by={sortBy}
                 sorted-direction={sortDirection}
-                row-number-offset="0"
+                onrowselection={getSelectedName}
                 >
             </lightning-datatable>
+
+            <div if:false={isLoaded}>
+            <lightning-spinner alternative-text="Loading" size="large"></lightning-spinner>
+            </div>
+            
+
+            <lightning-button label="Next" onclick={handleNext} >
+            </lightning-button>
+
+            <lightning-button label="Previous" onclick={handlePrevious}>
+            </lightning-button>
+
+            <p>Page {PageNumber}</p>
+
+
+
         </lightning-card> 
 
         

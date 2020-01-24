@@ -1,0 +1,43 @@
+<template>
+
+
+This is from the Dynamic DataTable
+
+
+<lightning-input label="Enter Sobject" ></lightning-input>
+<lightning-button label="Search" onclick={SearchForRecords} id></lightning-button>
+
+<lightning-input label="Enter Fields(Each Seperated with a ',')" ></lightning-input>
+<lightning-button label="Search" onclick={SearchForRecords} id></lightning-button>
+
+
+
+
+<lightning-card title="Design Attributes" icon-name="custom:custom19">
+    <center>
+        <div if:true={showDetails}>
+            <ul>
+                <li>Entered sObject : <b>{sObject}</b></li>
+                <li>Entered Fields : <b>{Fields}</b></li>
+                
+            </ul>
+        </div>
+    </center>
+</lightning-card>
+
+<lightning-card title="DataTable Wrapper Test">
+    <div style="height: 150px;">
+        <lightning-datatable
+            key-field="Id"
+            columns={accountColumns}
+            data={_two}
+            enable-infinite-loading={enableInfiniteLoading}
+            is-loading={tableLoadingState}
+            onloadmore={onLoadMoreHandler}>
+        </lightning-datatable>
+    </div>  
+</lightning-card>
+
+
+
+</template>

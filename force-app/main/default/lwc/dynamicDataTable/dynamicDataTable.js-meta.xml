@@ -2,13 +2,12 @@
 <LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>47.0</apiVersion>
     <isExposed>true</isExposed>
-
-
+    
+    
     <targets>
         <target>lightning__AppPage</target>
         <target>lightning__RecordPage</target>
-        <target>lightning__HomePage</target>
-        <target>lightning__Tab</target>        
+        <target>lightning__HomePage</target>        
     </targets>
 
 
@@ -18,12 +17,8 @@
             
             <property name="showDetails" type="Boolean" default="true" label="Do you want to Show Details ?"/>
 
-            <property name="sObject" type="String" default="" label="Enter the sObject : " datasource="apex://sObjectsListForLWC"/>
+            <property name="sObject" type="String" default="" label="Enter the sObject : " />
             <property name="Fields" type="String" default="" label="Enter the Fields : " />
-            <property name="LIMIT" type="String" default="" label="LIMIT : " />
-
-            <property name="OrderBy" type="String" default="" label="ORDER BY : " />
-
 
         </targetConfig>
       </targetConfigs>

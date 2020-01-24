@@ -1,0 +1,41 @@
+<template>
+ 
+<lightning-card title="Design Attributes" icon-name="custom:custom19">
+<center>
+<ul>
+<li>Entered sObject : <b>{sObject}</b></li>
+<li>Entered Fields : <b>{Fields}</b></li>
+</ul>
+
+ 
+</center>
+</lightning-card>
+ 
+<lightning-card>
+<template for:each={act_data} for:item="adata">
+
+   <!-- <template for:each={adata} for:item="ad" >
+
+        {ad}
+
+    </template>
+-->
+<!--
+<lightning-card key={a} title="Hello">
+
+    <p class="slds-p-horizontal_small">{a}</p>
+
+</lightning-card>
+
+<lightning-card>
+
+ {act_data}
+    
+</lightning-card>
+-->
+
+ 
+</template>
+</lightning-card>
+</template>
+
