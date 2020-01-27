@@ -1,0 +1,80 @@
+<template>
+
+    <lightning-card title="Design Attributes" icon-name="custom:custom19">
+        <center>
+            <div>
+                <ul>
+                    <li>Entered sObject : <b>{sObject}</b></li>
+                    <li>Entered Fields : <b>{Fields}</b></li>
+                </ul>
+            </div>
+        </center>
+    </lightning-card>
+    
+            <lightning-card title="">
+
+                <div class="slds-grid" >
+        
+                    <div class="slds-col slds-size_1-of-12">
+                    <lightning-combobox
+                            label="Items Per Page"
+                            name="progress"
+                            value={value}
+                            placeholder="Select Number Of Records to Display"
+                            options={options}
+                            onchange={handleChange}
+                            variant="label-stacked" >
+                    </lightning-combobox>
+                </div>
+                
+                <div class="slds-col slds-container--right slds-container--small slds-size--1-of-4">
+                    <lightning-combobox
+                    label="Sort By"
+                    name="sort"
+                    value={sortBy}
+                    placeholder="--None--"
+                    options={sortingLabels}
+                    onchange={handlesort}
+                    variant="label-stacked" >
+                </lightning-combobox>
+            </div>
+                
+                    </div>
+
+
+                <lightning-datatable
+                    data={act_data}
+                    columns={columns}
+                    key-field="Id"
+                    onsort={handleSortdata}
+                    sorted-by={sortBy}
+                    sorted-direction={sortDirection}
+                    onrowselection={getSelectedName}
+                    >
+                </lightning-datatable>
+    
+                <div if:false={isLoaded}>
+                <lightning-spinner alternative-text="Loading" size="large"></lightning-spinner>
+                </div>
+                
+    
+                <lightning-button label="Next" onclick={handleNext} >
+                </lightning-button>
+    
+                <lightning-button label="Previous" onclick={handlePrevious}>
+                </lightning-button>
+    
+                <p>Showing Page <b>{PageNumber}</b> of <b>{TotalPageNumbers}</b></p>
+                <p>Showing <b>{StartingRecord}</b> to <b>{EndingRecord}</b> of <b>{totalRecords}</b> entries</p>
+    
+    
+    
+            </lightning-card> 
+    
+            
+    
+        </template>
+        
+    
+        
+    </template>
