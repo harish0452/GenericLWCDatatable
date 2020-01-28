@@ -22,6 +22,11 @@
 
             <property name="OrderBy" type="String" default="" label="ORDER BY : " />
 
+            <property name="EnableFlow" type="boolean" label="Enable Flow : "/>
+            <property name="FlowName" type="String" default="" label="Flow Name : " datasource="apex://FlowNamesForGenericDataTable" /> 
+
+            <property name="EnableSorting" type="boolean" default="true" label="Enable Sorting : " />
+
 
         </targetConfig>
       </targetConfigs>

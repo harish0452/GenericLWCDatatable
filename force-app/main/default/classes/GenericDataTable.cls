@@ -3,8 +3,6 @@ public with sharing class GenericDataTable {
     @AuraEnabled(cacheable=true)
     Public static QueryDetails getFieldsList(String sobj, String Fields, String OrdBy, String sortorder, Integer LIM, Integer offset) {
 
-        system.debug('OrdBy------>>>>>>' + OrdBy);
-
         String ObjType = sobj;
         Map<String, Schema.SObjectType> schemaMap = Schema.getGlobalDescribe();
         Schema.SObjectType objectSchema = schemaMap.get(ObjType);
@@ -45,6 +43,12 @@ public with sharing class GenericDataTable {
     QueryDetails QD = new QueryDetails(FLS,FTS,sObjectList,sCount);
         
         return QD;
+    }
+
+    @AuraEnabled(Cacheable=true)
+    public static String getDomainName(){
+    String URL = URL.getSalesforceBaseUrl().toExternalForm();
+    return URL;
     }
 
 

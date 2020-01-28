@@ -1,9 +1,14 @@
 import { LightningElement, api, wire, track } from 'lwc';
 
 import getFieldsList from '@salesforce/apex/GenericDataTable.getFieldsList';
+import getDomainName from '@salesforce/apex/GenericDataTable.getDomainName';
 
 const my_columns = [];
 const sortLabels = [];
+
+const actions = [
+    { label: 'Show details', name: 'show_detailsNewTab' },
+    ];
 
 export default class DynaTable extends LightningElement {
 
@@ -12,6 +17,8 @@ export default class DynaTable extends LightningElement {
 
     @track columns;
     @track sortingLabels;
+    @api EnableSorting;
+    @api EnableFlow=false;
 
 
     @api sObject = this.sObject;
@@ -19,6 +26,7 @@ export default class DynaTable extends LightningElement {
     @api LIMIT = this.LIMIT;
     @track act_data;
     @api OrderBy;
+    @api FlowName;
 
     @track totalRecords;
     @track TotalPageNumbers;
@@ -34,6 +42,19 @@ export default class DynaTable extends LightningElement {
     @track isLoaded = false;
 
     @track ready = false;
+    @track myurl;
+
+    @track DisablePrevious = true;
+    @track DisableFirst = true;
+    @track DisabledLast;
+
+    @track openmodel = false;
+    openmodal() {
+        this.openmodel = true
+    }
+    closeModal() {
+        this.openmodel = false
+    } 
 
     get options() {
         return [
@@ -49,6 +70,16 @@ export default class DynaTable extends LightningElement {
         this.StartingRecord = '1';
         this.PageNumber = 1;
         this.EndingRecord = this.value;
+        console.log('Ending Record from handle change------' + this.EndingRecord);
+        console.log('Total records------->>>>' + this.totalRecords);
+        if(this.EndingRecord >= this.totalRecords){
+            this.EndingRecord = this.totalRecords;
+            this.DisableNext = true;
+            this.DisabledLast = true;
+        }
+        if(this.EndingRecord <= this.totalRecords){
+           // this.DisableNext = false;
+        }
     }
 
     handlesort(event) {
@@ -59,11 +90,18 @@ export default class DynaTable extends LightningElement {
     }
 
     handleNext(event) {
-
+        this.DisablePrevious = false;
         this.offset = parseInt(this.offset) + parseInt(this.value);
         this.PageNumber = parseInt(this.PageNumber) + 1;
         this.StartingRecord = parseInt(this.StartingRecord) + parseInt(this.value);
         this.EndingRecord = parseInt(this.EndingRecord) + parseInt(this.value);
+        if(this.totalRecords <= this.EndingRecord){
+            this.EndingRecord = this.totalRecords;
+            this.DisableNext = true;
+        }
+        if(this.totalRecords <= this.StartingRecord){
+            this.StartingRecord = this.totalRecords;
+        }
         this.isLoaded = false;
         
 }
@@ -80,6 +118,13 @@ export default class DynaTable extends LightningElement {
         if(parseInt(this.PageNumber) === 0){
             this.offset = 0;
             this.PageNumber = 1;
+
+        }
+        if(parseInt(this.PageNumber) === 1){
+            this.DisablePrevious = true;
+        }
+        if(this.totalRecords >= this.EndingRecord){
+            this.DisableNext = false;
         }
     }
 
@@ -87,6 +132,8 @@ export default class DynaTable extends LightningElement {
     getSelectedName() {
         //
     }
+
+    @wire (getDomainName) domainName;
 
     @wire (getFieldsList, {sobj : '$sObject', Fields : '$Fields', OrdBy : '$OrderBy',sortorder : '$sortDirection', LIM : '$value', offset : '$offset'}) FieldsList({data,error}){
         
@@ -96,6 +143,7 @@ export default class DynaTable extends LightningElement {
             var arr = Fields.split(",");
             var FieldLabels = data.FieldLabels;
             var FieldTypes = data.FieldTypes;
+            
 
             this.totalRecords = data.RecordCount;
             this.TotalPageNumbers = Math.ceil(parseInt(this.totalRecords)/parseInt(this.value));
@@ -103,9 +151,31 @@ export default class DynaTable extends LightningElement {
             this.act_data = data.FieldValueSobjectList;  
             this.isLoaded = true;
 
+            let actionsColumn = { type: 'action', typeAttributes: { rowActions: actions, menuAlignment: 'left' } };
+            my_columns.push(actionsColumn);
+
             for(let i=0;i<FieldLabels.length;i++){
-                let lab = {label : FieldLabels[i], fieldName : arr[i], type : FieldTypes[i], sortable: true};
+
+                if(this.EnableSorting===true){
+                let lab = {label : FieldLabels[i], fieldName : arr[i], type : FieldTypes[i], sortable: true, editable: 'true'};
                     my_columns.push(lab);
+                } else if(this.EnableSorting===false){
+                let lab = {label : FieldLabels[i], fieldName : arr[i], type : FieldTypes[i], sortable: false, editable: 'true'};
+                   my_columns.push(lab);
+
+                }
+                }
+
+                if(this.EnableFlow===true){
+                let labFlow = {type: 'button', label: 'Open Flow', typeAttributes: {
+                    label: 'view Details',
+                    menuAlignment: 'right',
+                    title: 'View Details',
+                    name: 'viewDetails',
+                    value: 'viewDetails',
+                    variant: 'brand'
+                }};
+                my_columns.push(labFlow);
             }
 
             this.columns = my_columns;
@@ -132,8 +202,45 @@ export default class DynaTable extends LightningElement {
 
     }
 
-    handleRowActions() {
-        //
+    LaunchFlow(event) {
+
+        const action = event.detail.action;
+        console.log('action New------>>>>>' + action);
+
+        let row = event.detail.row;
+        let currenRecordId= row.Id;
+        let my_domain = this.domainName.data;
+
+        switch (action.name) {
+
+            case 'show_detailsNewTab':
+                this.myurl = my_domain + '/' + currenRecordId;
+                window.open(this.myurl);
+                break;
+
+            case 'show_detailsModal':
+                this.myurl = my_domain + '/' + currenRecordId;
+                this.openmodal();
+                break;
+
+            case 'delete':
+                const rows = this.data;
+                const rowIndex = rows.indexOf(row);
+                rows.splice(rowIndex, 1);
+                this.data = rows;
+                break;
+
+            case 'viewDetails':
+            let Flow_Name=this.FlowName;
+            this.myurl = my_domain + '/flow/' + Flow_Name + '?recordId=' + currenRecordId;
+            this.openmodal();
+
+ }
+
+
+ 
+
+ 
     }
 
     

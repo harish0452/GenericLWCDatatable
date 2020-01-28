@@ -6,17 +6,17 @@
             "c/dataTableWithSortingInLWC": [
                 "dataTableWithSortingInLWC/dataTableWithSortingInLWC.js"
             ],
-            "c/dynaTable": [
-                "dynaTable/dynaTable.js"
-            ],
             "c/dynamicDataTable": [
                 "dynamicDataTable/dynamicDataTable.js"
             ],
-            "c/GenericCards": [
-                "GenericCards/GenericCards.js"
-            ],
             "c/genericCards": [
                 "genericCards/genericCards.js"
+            ],
+            "c/LWCGenericDataTable": [
+                "LWCGenericDataTable/LWCGenericDataTable.js"
+            ],
+            "c/lWCGenericDataTable": [
+                "lWCGenericDataTable/lWCGenericDataTable.js"
             ]
         }
     },

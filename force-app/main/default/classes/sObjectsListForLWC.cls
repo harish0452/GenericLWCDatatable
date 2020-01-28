@@ -11,7 +11,6 @@ global class sObjectsListForLWC extends VisualEditor.DynamicPickList {
         VisualEditor.DynamicPickListRows  myValues = new VisualEditor.DynamicPickListRows();
 
         for(String key : schemaMap.keySet()){
-            system.debug('Object names----->>>>>>>' + schemaMap.get(key).getDescribe().getName());
             VisualEditor.DataRow value = new VisualEditor.DataRow(schemaMap.get(key).getDescribe().getName(),schemaMap.get(key).getDescribe().getName());
             myValues.addRow(value);
         }
